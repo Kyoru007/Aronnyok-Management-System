@@ -1,0 +1,130 @@
+/* Custom navbar */
+.navbar-custom {
+    background: rgba(52, 58, 64, 0.9);
+    border-bottom: 2px solid #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #ffffff;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #adb5bd;
+}
+
+/* Sidebar */
+.sidebar {
+    background: rgba(52, 58, 64, 0.8);
+    color: #ffffff;
+    height: calc(100vh - 56px);
+    /* Adjust height based on your navbar height */
+    overflow-y: auto;
+    transition: all 0.3s;
+    position: fixed;
+    top: 56px;
+    /* Adjust based on your navbar height */
+    left: 0;
+    width: 250px;
+    padding-top: 20px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .nav-link {
+    text-align: center;
+    padding: 10px 5px;
+}
+
+.sidebar.collapsed .nav-link span {
+    display: none;
+}
+
+.sidebar .nav-link {
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(73, 80, 87, 0.8);
+    color: #ffffff;
+}
+
+.collapse-btn {
+    cursor: pointer;
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.collapse-btn:hover {
+    color: #adb5bd;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    width: calc(100% - 250px);
+    /* Full width minus the sidebar */
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content.collapsed {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    /* Full width minus the collapsed sidebar */
+}
+
+/* Welcome message */
+.welcome-message {
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Shadow effect */
+    border-radius: 8px;
+    /* Optional: Add rounded corners */
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease, filter 0.3s ease;
+    /* Smooth transition for shadow and filter */
+}
+
+.welcome-message:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    /* Slightly increased shadow */
+    filter: brightness(1.1) drop-shadow(0 0 10px rgba(144, 238, 144, 0.6));
+    /* Light green glow effect */
+}
+
+/* Ensure content is centered vertically and horizontally */
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* Full viewport height */
+}
+
+.container-fluid>.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Align items at the top */
+    align-items: center;
+}

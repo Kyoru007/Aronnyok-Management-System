@@ -1,0 +1,13 @@
+.loginPage {
+    background: url('Images/exia.png');
+    background: linear-gradient(rgba(11, 104, 211, 0.5), rgba(228, 86, 4, 0.5)), url('Images/exia.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loginForm {
+    background: linear-gradient(rgba(201, 221, 16, 0.5),
+            rgba(115, 255, 0, 0.5));
+    color: rgba(166, 242, 100, 0.734);
+}
