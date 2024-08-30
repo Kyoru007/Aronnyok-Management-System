@@ -315,22 +315,29 @@ adminrouter.get('/employee/:id', (req, res) => {
     })
 })
 
-adminrouter.put('/employee/:id', (req, res) => {
-    console.log(req.params)
+
+const upload = multer(); // Assuming file uploads are handled by multer
+
+adminrouter.put('/employee/:id', upload.any(), (req, res) => {
+    console.log(req.params); // Should log the params correctly
+    console.log(req.body);   // Log the body to check its structure
+
     const { id } = req.params;
+
+    // Adjust destructuring based on your form structure
     const {
-        firstName, lastName, phone, discipline, university, email, address, department, salary
-    } = req.body;
+        firstName, lastName, telephone, discipline, university, email, address, department, salary
+    } = req.body; // Adjust this based on what you see in req.body
 
     const sql = `
         UPDATE Employees 
-        SET firstName = ?, lastName = ?, phone = ?, disciplineId = ?, universityId = ?, 
+        SET firstName = ?, lastName = ?, telephone = ?, disciplineId = ?, universityId = ?, 
             email = ?, address = ?, departmentId = ?, salary = ?
         WHERE id = ?
     `;
 
     con.query(sql, [
-        firstName, lastName, phone, discipline, university, email, address, department, salary, id
+        firstName, lastName, telephone, discipline, university, email, address, department, salary, id
     ], (err, result) => {
         if (err) {
             console.error('Query Error:', err);
@@ -342,7 +349,7 @@ adminrouter.put('/employee/:id', (req, res) => {
             id,
             firstName,
             lastName,
-            phone,
+            telephone,
             discipline,
             university,
             email,
@@ -354,6 +361,48 @@ adminrouter.put('/employee/:id', (req, res) => {
         return res.json({ Status: true, Employee: updatedEmployee });
     });
 });
+adminrouter.get('/employee-count', (req, res) => {
+    const sql = 'SELECT COUNT(*) AS totalEmployees FROM Employees';
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.error('Query Error:', err);
+            return res.status(500).json({ Status: false, Error: 'Query Error' });
+        }
+        return res.json({ Status: true, TotalEmployees: result[0].totalEmployees });
+    });
+});
+adminrouter.get('/employee-count-by-category', (req, res) => {
+    const sql = `
+        SELECT d.name AS department, COUNT(e.id) AS totalEmployees
+        FROM Employees e
+        JOIN category d ON e.departmentId = d.id
+        GROUP BY d.name
+    `;
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.error('Query Error:', err);
+            return res.status(500).json({ Status: false, Error: 'Query Error' });
+        }
+        return res.json({ Status: true, EmployeeCountByCategory: result });
+    });
+});
+adminrouter.get('/employee-count-by-university', (req, res) => {
+    const sql = `
+        SELECT u.name AS university, COUNT(e.id) AS totalEmployees
+        FROM Employees e
+        JOIN University u ON e.universityId = u.Id
+        GROUP BY u.name
+    `;
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.error('Query Error:', err);
+            return res.status(500).json({ Status: false, Error: 'Query Error' });
+        }
+        return res.json({ Status: true, EmployeeCountByUniversity: result });
+    });
+});
+
+
 
 
 export { adminrouter };

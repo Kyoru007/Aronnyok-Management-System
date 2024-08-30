@@ -34,10 +34,8 @@ const EditEmployee = () => {
         // Fetch the employee details based on the ID
         axios.get(`http://localhost:3000/auth/employee/${id}`)
             .then((result) => {
-                if (result.data.Status) {
-                    const employee = result.data.Result;
-                    console.log(employee)
-                    // Assuming the API returns data with matching keys to your form state
+                if (result.data.Status && result.data.Result) {
+                    const employee = result.data.Result; // Adjust according to the actual response structure
                     setEmployee({
                         ...employee,
                         firstName: employee.firstName || '',
@@ -46,19 +44,19 @@ const EditEmployee = () => {
                         address: employee.address || '',
                         university: employee.university || '',
                         discipline: employee.discipline || '',
-                        password: '', // keep password fields empty for security
+                        password: '',
                         confirmPassword: '',
                         telephone: employee.telephone || '',
                         email: employee.email || '',
                         socialMedia: employee.socialMedia || [''],
-                        image: null, // Keep file fields empty, as these should be re-uploaded if needed
+                        image: null,
                         idCardImage: null,
                         emergencyContact: employee.emergencyContact || '',
                         department: employee.department || '',
                         salary: employee.salary || ''
                     });
                 } else {
-                    alert(result.data.Error);
+                    console.error('Employee data not found in the response');
                 }
             }).catch((err) => console.error("Error fetching employee data:", err));
     }, [id]);
@@ -132,22 +130,29 @@ const EditEmployee = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validate passwords match
         if (employee.password !== employee.confirmPassword) {
             alert("Passwords do not match.");
             return;
         }
 
         const formData = new FormData();
+
         for (const key in employee) {
             if (key === 'socialMedia') {
                 formData.append(key, JSON.stringify(employee[key]));
+            } else if (key === 'image' || key === 'idCardImage') {
+                // Only append if files are selected
+                if (employee[key]) formData.append(key, employee[key]);
             } else {
                 formData.append(key, employee[key]);
             }
         }
 
-        axios.put(`http://localhost:3000/auth/employee/${id}`, formData)
+        axios.put(`http://localhost:3000/auth/employee/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then(result => {
                 if (result.data.Status) {
                     navigate('/lobby/employee');
@@ -160,6 +165,7 @@ const EditEmployee = () => {
                 alert("Failed to update employee.");
             });
     };
+
 
     return (
         <div className='d-flex justify-content-center align-items-center vh-75'>
