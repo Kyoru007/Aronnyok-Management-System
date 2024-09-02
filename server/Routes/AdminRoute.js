@@ -402,7 +402,11 @@ adminrouter.get('/employee-count-by-university', (req, res) => {
     });
 });
 
-
+adminrouter.get('/logout', (req, res) => {
+    res.clearCookie('token')
+    res.json({ Status: true, Message: 'Logged out successfully' });
+    return res.json({ Status: true })
+})
 
 
 export { adminrouter };
