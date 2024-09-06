@@ -19,7 +19,7 @@ const EmployeeLogin = () => {
             .then(result => {
 
                 if (result.data.loginStatus) {
-                    navigate('/lobby')
+                    navigate('/employee_detail/' + result.data.id)
                 }
                 else {
                     setError(result.data.Error)
