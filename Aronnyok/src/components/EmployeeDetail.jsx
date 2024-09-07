@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 const EmployeeDetail = () => {
     const { id } = useParams(); // Getting employee ID from URL params
     const [employee, setEmployee] = useState(null); // State to hold employee details
     const [tasks, setTasks] = useState([]); // State to hold tasks and deadlines
+    const navigate = useNavigate(); // For navigation (edit & logout)
 
     useEffect(() => {
         // Fetch employee details including tasks
@@ -16,6 +18,20 @@ const EmployeeDetail = () => {
             })
             .catch(error => console.error(error));
     }, [id]);
+
+    // Logout handler
+    const handleLogout = () => {
+        axios.post('http://localhost:3000/employee/logout') // Assuming backend handles logout with a POST request
+            .then(() => {
+                navigate('/employeelogin'); // Redirect to login page after logout
+            })
+            .catch(error => console.error("Logout failed:", error));
+    };
+
+    // Edit handler
+    const handleEdit = () => {
+        navigate(`/edit_employee/${id}`); // Redirect to the edit form with employee id
+    };
 
     return (
         <div className="employee-detail">
@@ -44,6 +60,10 @@ const EmployeeDetail = () => {
                     ) : (
                         <p>No tasks assigned.</p>
                     )}
+
+                    {/* Logout and Edit buttons */}
+                    <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
+                    <button className="btn btn-primary" onClick={handleEdit}>Edit Employee</button>
                 </>
             ) : (
                 <p>Loading employee details...</p>

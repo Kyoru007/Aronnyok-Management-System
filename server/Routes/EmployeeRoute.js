@@ -72,5 +72,11 @@ employeerouter.get('/detail/:id', (req, res) => {
     });
 });
 
+employeerouter.post('/logout', (req, res) => {
+    // Clear the token cookie
+    res.clearCookie('token');  // Assuming your token is stored in a cookie called 'token'
+    return res.json({ message: 'Logout successful', success: true });
+});
+
 
 export { employeerouter }
