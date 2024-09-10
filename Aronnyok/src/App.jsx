@@ -13,13 +13,19 @@ import University from './components/University'
 import AddUniversity from './components/AddUniversity'
 import Disciplines from './components/Discipline'
 import EditEmployee from './components/EditEmployee'
+import EmployeeLogin from './components/EmployeeLogin'
+import EmployeeDetail from './components/EmployeeDetail'
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/employeelogin" element={<EmployeeLogin />} />
+        <Route path="/employee_detail/:id" element={<EmployeeDetail />} />
         <Route path="/bosslogin" element={<Login />} />
         <Route path="/lobby" element={<Lobby />}>
+
           <Route path="" element={<Home />} />
           <Route path="/lobby/employee" element={<Employee />} />
           <Route path="/lobby/category" element={<Category />} />
@@ -30,6 +36,8 @@ function App() {
           <Route path="/lobby/add_university" element={<AddUniversity />} />
           <Route path="/lobby/disciplines" element={<Disciplines />} />
           <Route path="/lobby/edit_employee/:id" element={<EditEmployee />} />
+
+
         </Route>
       </Routes>
     </BrowserRouter>

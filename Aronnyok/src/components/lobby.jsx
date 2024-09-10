@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import './lobby.css';
+import axios from 'axios';
 
 const Lobby = () => {
     const [collapsed, setCollapsed] = useState(false);
+    axios.defaults.withCredentials = true
     const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setCollapsed(!collapsed);
@@ -25,6 +28,22 @@ const Lobby = () => {
             default:
                 return 'Welcome';
         }
+    };
+
+    const handleLogout = () => {
+
+        // Clear user authentication data (like token) from localStorage or sessionStorage
+        axios.get('http://localhost:3000/auth/logout')
+            .then(result => {
+                if (result.data.Status) {
+                    navigate('/bosslogin', { replace: true });
+                }
+                localStorage.removeItem('authToken'); // Example: remove the auth token
+                sessionStorage.removeItem('authToken'); // If stored in sessionStorage
+
+                // Redirect to login page
+                navigate('/bosslogin'); // Adjust the path as needed
+            })
     };
 
     return (
@@ -57,7 +76,8 @@ const Lobby = () => {
                         <Link className="nav-link" to="/lobby/profile">
                             <span>Your Profile</span>
                         </Link>
-                        <Link className="nav-link" to="/lobby/logout">
+                        {/* Add onClick to trigger logout */}
+                        <Link className="nav-link" to="#" onClick={handleLogout}>
                             <span>Logout</span>
                         </Link>
                     </nav>
